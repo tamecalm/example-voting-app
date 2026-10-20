@@ -25,4 +25,6 @@ RUN dotnet publish -c release -o /app -a $TARGETARCH --self-contained false --no
 FROM mcr.microsoft.com/dotnet/runtime:7.0
 WORKDIR /app
 COPY --from=build /app .
+RUN useradd -u 10001 -m -s /bin/sh appuser && chown -R appuser:appuser /app
+USER appuser
 ENTRYPOINT ["dotnet", "Worker.dll"]
